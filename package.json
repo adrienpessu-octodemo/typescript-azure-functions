@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "case": "^1.6.1",
-    "fs": "^1.0.0"
+    "fs": "^0.0.1-security",
+    "sequelize": "^6.33.0"
   },
   "devDependencies": {
     "@azure/functions": "^1.0.1-beta2",
+    "@types/node": "^20.8.5",
     "typescript": "^3.3.3"
   }
 }
