@@ -1,7 +1,7 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import fs = require('fs')
-import {UserModel} from "../models/user";
+import {AzureFunction, Context, HttpRequest} from "@azure/functions"
 import {logger} from "sequelize/types/utils/logger";
+import fs = require('fs');
+
 const request = require('request')
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
@@ -9,6 +9,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     context.res = {
         statusCode: 200,
+        body: req.body
     };
     const res = context.res;
 
@@ -21,11 +22,12 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 logger.warn(`Error retrieving user profile image: ${utils.getErrorMessage(err)}; using image link directly`)
             })
             .on('response', function (res: Response) {
-                if (res.statusCode === 200) {
+                if (res.status === 200) {
                     const ext = ['jpg', 'jpeg', 'png', 'svg', 'gif'].includes(url.split('.').slice(-1)[0].toLowerCase()) ? url.split('.').slice(-1)[0].toLowerCase() : 'jpg'
-                    imageRequest.pipe(fs.createWriteStream(`frontend/dist/frontend/assets/public/images/uploads/${loggedInUser.data.id}.${ext}`))
-                    UserModel.findByPk(loggedInUser.data.id).then(async (user: UserModel | null) => { return await user?.update({ profileImage: `/assets/public/images/uploads/${loggedInUser.data.id}.${ext}` }) }).catch((error: Error) => { next(error) })
-                } else UserModel.findByPk(loggedInUser.data.id).then(async (user: UserModel | null) => { return await user?.update({ profileImage: url }) }).catch((error: Error) => { next(error) })
+                    imageRequest.pipe(fs.createWriteStream(`frontend/dist/frontend/assets/public/images/uploads/data.${ext}`))
+                    // UserModel.findByPk(loggedInUser.data.id).then(async (user: UserModel | null) => { return await user?.update({ profileImage: `/assets/public/images/uploads/${loggedInUser.data.id}.${ext}` }) }).catch((error: Error) => { next(error) })
+                }
+                // else UserModel.findByPk(loggedInUser.data.id).then(async (user: UserModel | null) => { return await user?.update({ profileImage: url }) }).catch((error: Error) => { next(error) })
             })
       }
       context.res = {
