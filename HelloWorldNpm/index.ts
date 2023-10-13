@@ -1,13 +1,11 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { upper } from "case"
+import {AzureFunction, Context, HttpRequest} from "@azure/functions"
 
-import utils = require('../lib/utils')
 import * as path from "path";
+
 const challenges = require('../data/datacache').challenges
 const db = require('../data/mongodb')
 const utils = require('../lib/utils')
 const security = require('../lib/insecurity')
-const challenges = require('../data/datacache').challenges
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     const id = utils.disableOnContainerEnv() ? String(req.params.id).replace(/[^\w-]+/g, '') : req.params.id
@@ -36,7 +34,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         res.sendFile(path.resolve('ftp/', file))
     } else {
         res.status(403)
-        next(new Error('Only .md and .pdf files are allowed!'))
     }
 };
 

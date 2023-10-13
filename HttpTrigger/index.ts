@@ -3,6 +3,7 @@ import {logger} from "sequelize/types/utils/logger";
 import fs = require('fs');
 
 const request = require('request')
+const utils = require('../lib/utils')
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('HTTP trigger function processed a request.');
