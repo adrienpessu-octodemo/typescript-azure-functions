@@ -7,12 +7,12 @@ const db = require('../data/mongodb')
 const utils = require('../lib/utils')
 const security = require('../lib/insecurity')
 
-const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
-    const id = utils.disableOnContainerEnv() ? String(req.params.id).replace(/[^\w-]+/g, '') : req.params.id
+const httpTrigger: AzureFunction = async function (context: Context, httpRequest: HttpRequest): Promise<void> {
+    const id = utils.disableOnContainerEnv() ? String(httpRequest.params.id).replace(/[^\w-]+/g, '') : httpRequest.params.id
 
     context.res = {};
     const res = context.res;
-    let file = req.params.file
+    let file = httpRequest.params.file
 
     utils.solveIf(challenges.reflectedXssChallenge, () => { return utils.contains(id, '<iframe src="javascript:alert(`xss`)">') })
     db.orders.find({ $where: `this.orderId === '${id}'` }).then((order: any) => {
