@@ -4,13 +4,6 @@ import fs = require('fs');
 const request = require('request')
 const utils = require('../lib/utils')
 
-
-const AWSXRay = require('aws-xray-sdk-core')
-const AWS = AWSXRay.captureAWS(require('aws-sdk'))
-
-// Create client outside of handler to reuse
-const lambda = new AWS.Lambda()
-
 // Handler
 module.exports.handler = async function(event, context) {
     context.log('HTTP trigger function processed a request.');
@@ -45,11 +38,3 @@ module.exports.handler = async function(event, context) {
     };
 }
 
-// Use SDK client
-var getAccountSettings = function(){
-    return lambda.getAccountSettings().promise()
-}
-
-var serialize = function(object) {
-    return JSON.stringify(object, null, 2)
-}
