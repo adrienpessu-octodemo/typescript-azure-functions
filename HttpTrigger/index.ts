@@ -12,7 +12,7 @@ const AWS = AWSXRay.captureAWS(require('aws-sdk'))
 const lambda = new AWS.Lambda()
 
 // Handler
-exports.handler = async function(event, context) {
+module.exports.handler = async function(event, context) {
     context.log('HTTP trigger function processed a request.');
     const req = context.req;
 
