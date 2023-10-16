@@ -1,13 +1,12 @@
+import {AzureFunction, Context, HttpRequest} from "@azure/functions"
 import {logger} from "sequelize/types/utils/logger";
 import fs = require('fs');
 
 const request = require('request')
 const utils = require('../lib/utils')
 
-// Handler
-module.exports.handler = async function(event, context) {
+const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('HTTP trigger function processed a request.');
-    const req = context.req;
 
     context.res = {
         statusCode: 200,
@@ -31,10 +30,12 @@ module.exports.handler = async function(event, context) {
                 }
                 // else UserModel.findByPk(loggedInUser.data.id).then(async (user: UserModel | null) => { return await user?.update({ profileImage: url }) }).catch((error: Error) => { next(error) })
             })
-    }
-    context.res = {
+      }
+      context.res = {
         status: 400,
         body: "Please pass a name on the query string or in the request body"
     };
-}
 
+};
+
+export default httpTrigger;
